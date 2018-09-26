@@ -18,6 +18,10 @@ public class Practice05RotateView extends View {
     Point point1 = new Point(200, 200);
     Point point2 = new Point(600, 200);
 
+    {
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.maps);
+    }
+
     public Practice05RotateView(Context context) {
         super(context);
     }
@@ -30,15 +34,25 @@ public class Practice05RotateView extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    {
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.maps);
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        float bitmapWidth = bitmap.getWidth();
+        float bitmapHeight = bitmap.getHeight();
+
+        canvas.save();
+        canvas.rotate(180, point1.x + bitmapWidth / 2, point1.y + bitmapHeight / 2);
 
         canvas.drawBitmap(bitmap, point1.x, point1.y, paint);
+        canvas.restore();
+
+        canvas.save();
+
+        canvas.rotate(45, point2.x + bitmapWidth / 2, point2.y + bitmapHeight / 2);
+        canvas.translate(-100,-100);
         canvas.drawBitmap(bitmap, point2.x, point2.y, paint);
+        canvas.restore();
+
+
     }
 }

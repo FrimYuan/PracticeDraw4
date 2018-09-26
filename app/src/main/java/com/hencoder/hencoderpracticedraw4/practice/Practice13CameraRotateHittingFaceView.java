@@ -12,6 +12,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -26,6 +28,25 @@ public class Practice13CameraRotateHittingFaceView extends View {
     int degree;
     ObjectAnimator animator = ObjectAnimator.ofInt(this, "degree", 0, 360);
 
+    {
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.maps);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 2, bitmap.getHeight() * 2, true);
+        bitmap.recycle();
+        bitmap = scaledBitmap;
+
+        animator.setDuration(5000);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float newZ = -displayMetrics.density * 6;
+        camera.setLocation(0, 0, newZ);
+
+        Log.d("YGG", " camera.getLocationZ();  " + camera.getLocationX());
+        Log.d("YGG", " camera.getLocationZ();  " + camera.getLocationY());
+        Log.d("YGG", " camera.getLocationZ();  " + camera.getLocationZ());
+    }
+
     public Practice13CameraRotateHittingFaceView(Context context) {
         super(context);
     }
@@ -36,29 +57,6 @@ public class Practice13CameraRotateHittingFaceView extends View {
 
     public Practice13CameraRotateHittingFaceView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    {
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.maps);
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 2, bitmap.getHeight() * 2, true);
-        bitmap.recycle();
-        bitmap = scaledBitmap;
-
-        animator.setDuration(5000);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        animator.start();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        animator.end();
     }
 
     @SuppressWarnings("unused")
@@ -87,5 +85,17 @@ public class Practice13CameraRotateHittingFaceView extends View {
         canvas.concat(matrix);
         canvas.drawBitmap(bitmap, point.x, point.y, paint);
         canvas.restore();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        animator.start();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        animator.end();
     }
 }
